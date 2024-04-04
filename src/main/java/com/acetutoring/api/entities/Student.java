@@ -43,6 +43,9 @@ public class Student {
     @JoinColumn(name = "user_id", unique = true)
     private User userId;
 
+    @Column(name = "accept_terms")
+    private boolean acceptTerms;
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", updatable = false)

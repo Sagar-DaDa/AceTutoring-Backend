@@ -1,16 +1,8 @@
-package com.acetutoring.api.public_api;
+package com.acetutoring.api.controllers;
 
-import com.acetutoring.api.dto.AvailableCourseDto;
-import com.acetutoring.api.dto.BlogPostDto;
-import com.acetutoring.api.dto.TestimonialDto;
-import com.acetutoring.api.dto.TutorDto;
-import com.acetutoring.api.other_services.EmailSender;
-import com.acetutoring.api.services.AvailableCourseService;
-import com.acetutoring.api.services.BlogPostService;
-import com.acetutoring.api.services.TestimonialService;
-import com.acetutoring.api.services.TutorService;
+import com.acetutoring.api.dto.*;
+import com.acetutoring.api.services.*;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +15,15 @@ import java.util.Map;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/public/api")
-public class PublicController {
+public class PublicApiController {
     private BlogPostService blogPostService;
     private TutorService tutorService;
     private TestimonialService testimonialService;
     private AvailableCourseService availableCourseService;
+    private EnrollmentService enrollmentService;
+    private StudentService studentService;
+    private UserService userService;
+    private CustomerQueryService customerQueryService;
 
     @GetMapping("/blogPost/{blogPostId}")
     public ResponseEntity<BlogPostDto> getBlogPostById(@PathVariable Long blogPostId) {
@@ -58,7 +54,7 @@ public class PublicController {
 
     @GetMapping("/availableCourse/{availableCourseId}")
     public ResponseEntity<AvailableCourseDto> getAvailableCourseById(
-            @PathVariable Long availableCourseId){
+            @PathVariable Long availableCourseId) {
         return ResponseEntity.ok(availableCourseService.getAvailableCourseById(availableCourseId));
     }
 
@@ -66,21 +62,21 @@ public class PublicController {
     public ResponseEntity<Map<Long, List<AvailableCourseDto>>> getAllAvailableCourses(
             @PathVariable String category,
             @PathVariable Long fromGrade,
-            @PathVariable Long toGrade){
+            @PathVariable Long toGrade) {
         Map<Long, List<AvailableCourseDto>> availableCourseMap = new HashMap<>();
-        List<AvailableCourseDto> availableCourseDtosList= availableCourseService.getAllAvailableCourses();
+        List<AvailableCourseDto> availableCourseDtosList = availableCourseService.getAllAvailableCourses();
 
-        for (AvailableCourseDto availableCourse : availableCourseDtosList){
-            if(availableCourse.getCategory().equalsIgnoreCase(category)
+        for (AvailableCourseDto availableCourse : availableCourseDtosList) {
+            if (availableCourse.getCategory().equalsIgnoreCase(category)
                     && (Long.parseLong(availableCourse.getCourse().getGrade()) >= fromGrade)
-                    && (Long.parseLong(availableCourse.getCourse().getGrade()) <= toGrade)){
+                    && (Long.parseLong(availableCourse.getCourse().getGrade()) <= toGrade)) {
                 List<AvailableCourseDto> nestedList;
-                if(availableCourseMap.containsKey(Long.parseLong(availableCourse.getCourse().getGrade()))){
+                if (availableCourseMap.containsKey(Long.parseLong(availableCourse.getCourse().getGrade()))) {
                     nestedList = new LinkedList<>();
                     nestedList = availableCourseMap.get(Long.parseLong(availableCourse.getCourse().getGrade()));
                     nestedList.add(availableCourse);
                     availableCourseMap.put(Long.parseLong(availableCourse.getCourse().getGrade()), nestedList);
-                }else{
+                } else {
                     nestedList = new LinkedList<>();
                     nestedList.add(availableCourse);
                     availableCourseMap.put(Long.parseLong(availableCourse.getCourse().getGrade()), nestedList);
@@ -88,6 +84,36 @@ public class PublicController {
             }
         }
         return ResponseEntity.ok(availableCourseMap);
+    }
+
+    @PostMapping("/enrollment")
+    public ResponseEntity<EnrollmentDto> createEnrollment(
+            @RequestBody EnrollmentDto enrollmentDto) {
+        System.out.println(
+                "[CUSTOM] PublicController.java, line-91, enrollmentDto.enrolledCourseId: "
+                        + enrollmentDto.getEnrolledCourseId());
+        AvailableCourseDto courseDto = availableCourseService
+                .getAvailableCourseById(enrollmentDto.getEnrolledCourseId());
+        System.out.println("[CUSTOM] PublicController.java, line-96, courseName: " + courseDto.getCourse().getCourseName());
+        System.out.println("[CUSTOM] PublicController.java, line-96, duration: " + courseDto.getDuration());
+        return ResponseEntity.ok(enrollmentService.createEnrollment(enrollmentDto));
+    }
+
+    @GetMapping("/enrollment/{enrollmentId}")
+    public ResponseEntity<EnrollmentDto> getEnrollmentById(@PathVariable Long enrollmentId) {
+        return ResponseEntity.ok(enrollmentService.getEnrollmentById(enrollmentId));
+    }
+
+    @GetMapping("/checkEmailExists/{emailAddress}")
+    public ResponseEntity<Boolean> isEmailExists(@PathVariable String emailAddress) {
+        return ResponseEntity.ok((studentService.isStudentExistsWithEmail(emailAddress)
+                || userService.isUserExistsWithEmail(emailAddress)));
+    }
+
+    @PostMapping("/customerQuery")
+    public String createCustomerQuery(@RequestBody CustomerQueryDto customerQueryDto){
+        customerQueryService.createCustomerQuery(customerQueryDto);
+        return "Customer query created.";
     }
 
 }

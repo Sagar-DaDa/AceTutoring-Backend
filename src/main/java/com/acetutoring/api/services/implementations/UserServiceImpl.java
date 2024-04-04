@@ -72,4 +72,9 @@ public class UserServiceImpl implements UserService {
         );
         userRepo.delete(foundUser);
     }
+
+    @Override
+    public boolean isUserExistsWithEmail(String email) {
+        return userRepo.findByEmailAddress(email).isPresent();
+    }
 }

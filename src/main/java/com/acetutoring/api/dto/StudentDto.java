@@ -23,6 +23,7 @@ public class StudentDto {
     private String school;
     private String additionalInformation;
     private UserDto userId;
+    private boolean acceptTerms;
     private Date createdAt;
     private Date updatedAt;
 

@@ -4,22 +4,19 @@ import com.acetutoring.api.dto.EnrollmentDto;
 import com.acetutoring.api.dto.StudentDto;
 import com.acetutoring.api.dto.UserDto;
 import com.acetutoring.api.entities.Enrollment;
-import com.acetutoring.api.entities.Student;
 import com.acetutoring.api.exceptions.EmailAlreadyExistsException;
 import com.acetutoring.api.exceptions.ResourceNotFoundException;
-import com.acetutoring.api.mapper.*;
+import com.acetutoring.api.mapper.AvailableCourseMapper;
+import com.acetutoring.api.mapper.EnrollmentMapper;
+import com.acetutoring.api.mapper.StudentMapper;
 import com.acetutoring.api.other_services.EmailSender;
 import com.acetutoring.api.other_services.PasswordGenerator;
 import com.acetutoring.api.repositories.EnrollmentRepo;
-import com.acetutoring.api.services.EnrollmentService;
-import com.acetutoring.api.services.StudentService;
-import com.acetutoring.api.services.UserRoleService;
-import com.acetutoring.api.services.UserService;
+import com.acetutoring.api.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,18 +26,19 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private StudentService studentService;
     private UserService userService;
     private UserRoleService userRoleService;
+    private AvailableCourseService availableCourseService;
 
     @Autowired
     private EmailSender emailSender;
 
-
     @Override
     public EnrollmentDto createEnrollment(EnrollmentDto enrollmentDto) {
-        Enrollment newEnrollment;
+        EnrollmentDto newEnrollment;
         String password;
         UserDto newUser;
         StudentDto newStudent;
         String requestedEmail = enrollmentDto.getEnrolledStudent().getEmail();
+        Enrollment newEnrolledStudent;
 
         if (studentService.isStudentExistsWithEmail(requestedEmail)) {
             throw new EmailAlreadyExistsException("Provided email is associated with another account.");
@@ -49,30 +47,25 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
             newUser = userService.createUser(
                     new UserDto(
-                    enrollmentDto.getEnrolledStudent().getStudentName(),
-                    enrollmentDto.getEnrolledStudent().getEmail(),
-                    enrollmentDto.getEnrolledStudent().getEmail(),
-                    enrollmentDto.getEnrolledStudent().getContactNumber(),
-                    password,
-                    userRoleService.getUserRoleByRoleName("Customer")
-            )); //User created
+                            enrollmentDto.getEnrolledStudent().getStudentName(),
+                            enrollmentDto.getEnrolledStudent().getEmail(),
+                            enrollmentDto.getEnrolledStudent().getEmail(),
+                            enrollmentDto.getEnrolledStudent().getContactNumber(),
+                            password,
+                            userRoleService.getUserRoleByRoleName("Customer")
+                    )); //User created
             newStudent = enrollmentDto.getEnrolledStudent();
             newStudent.setUserId(newUser);
 
-            newEnrollment = EnrollmentMapper.mapToEnrollment(enrollmentDto);
+            newEnrollment = new EnrollmentDto();
 
-            newEnrollment.setEnrolledStudent(
-                    StudentMapper.mapToStudent(
-                            studentService.createStudent(newStudent) //Student created
-                    )
+            newEnrollment.setEnrolledCourse(
+                    availableCourseService.getAvailableCourseById(enrollmentDto.getEnrolledCourseId())
             );
-
-            newEnrollment.setCourseStartDate(new Date()); //Remove it
-            newEnrollment.setCourseEndDate(new Date()); //Remove it
-            newEnrollment.setActive(true);
+            newEnrollment.setEnrolledStudent(studentService.createStudent(newStudent));
+              newEnrolledStudent = enrollmentRepo
+                      .save(EnrollmentMapper.mapToEnrollment(newEnrollment)); //Enrollment created
         }
-
-        Enrollment newEnrolledStudent = enrollmentRepo.save(newEnrollment); //Enrollment created
 
         String subject = "Welcome to Ace Tutoring";
         String body = "Dear User,\n\n" +
@@ -138,5 +131,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                         )
                 );
         enrollmentRepo.delete(foundEnrollment);
+    }
+
+    @Override
+    public Long hasActiveEnrollment(Long studentId) {
+        return enrollmentRepo.hasActiveEnrollment(studentId);
     }
 }

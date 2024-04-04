@@ -21,6 +21,9 @@ public class Enrollment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Transient
+    private Long enrolledCourseId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "enrolled_course")
     private AvailableCourse enrolledCourse;
@@ -37,7 +40,7 @@ public class Enrollment {
     @Column(name = "course_end_date")
     private Date courseEndDate;
 
-    private boolean active;
+    private boolean active = false;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,4 +51,23 @@ public class Enrollment {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    public Enrollment(
+            Long id,
+            AvailableCourse enrolledCourse,
+            Student enrolledStudent,
+            Date courseStartDate,
+            Date courseEndDate,
+            boolean active,
+            Date createdAt,
+            Date updatedAt) {
+        this.id = id;
+        this.enrolledCourse = enrolledCourse;
+        this.enrolledStudent = enrolledStudent;
+        this.courseStartDate = courseStartDate;
+        this.courseEndDate = courseEndDate;
+        this.active = active;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
 }

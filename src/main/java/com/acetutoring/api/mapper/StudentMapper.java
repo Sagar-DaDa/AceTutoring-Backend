@@ -14,6 +14,7 @@ public class StudentMapper {
                 student.getSchool(),
                 student.getAdditionalInformation(),
                 UserMapper.mapToUserDto(student.getUserId()),
+                student.isAcceptTerms(),
                 student.getCreatedAt(),
                 student.getUpdatedAt()
         );
@@ -29,6 +30,7 @@ public class StudentMapper {
                 studentDto.getSchool(),
                 studentDto.getAdditionalInformation(),
                 UserMapper.mapToUser(studentDto.getUserId()),
+                studentDto.isAcceptTerms(),
                 studentDto.getCreatedAt(),
                 studentDto.getUpdatedAt()
         );
