@@ -41,4 +41,19 @@ public class StudentDto {
         this.school = school;
         this.additionalInformation = additionalInformation;
     }
+
+    public StudentDto(
+            Long id,
+            String studentName,
+            String parentName,
+            String contactNumber,
+            String email,
+            String school) {
+        this.id = id;
+        this.studentName = studentName;
+        this.parentName = parentName;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.school = school;
+    }
 }

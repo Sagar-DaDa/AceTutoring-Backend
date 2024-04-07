@@ -37,14 +37,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleDto getUserRoleByRoleName(String roleName) {
-        return UserRoleMapper.mapToUserRoleDto(userRoleRepo
+    public UserRole findByRoleName(String roleName) {
+        return userRoleRepo
                 .findByRoleName(roleName)
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
                                 "User role not found."
                         )
-                ));
+                );
     }
 
     @Override

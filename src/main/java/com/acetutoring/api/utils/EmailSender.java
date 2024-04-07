@@ -1,4 +1,4 @@
-package com.acetutoring.api.other_services;
+package com.acetutoring.api.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

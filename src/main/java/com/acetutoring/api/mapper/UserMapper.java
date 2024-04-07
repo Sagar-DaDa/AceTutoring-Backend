@@ -11,7 +11,6 @@ public class UserMapper {
                 user.getUserName(),
                 user.getEmailAddress(),
                 user.getMobile(),
-                UserRoleMapper.mapToUserRoleDto(user.getRole()),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
         );
@@ -25,7 +24,7 @@ public class UserMapper {
                 userDto.getEmailAddress(),
                 userDto.getMobile(),
                 userDto.getPassword(),
-                UserRoleMapper.mapToUserRole(userDto.getRole()),
+                userDto.getRoles(),
                 userDto.getCreatedAt(),
                 userDto.getUpdatedAt()
         );

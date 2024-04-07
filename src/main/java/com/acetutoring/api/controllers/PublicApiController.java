@@ -3,6 +3,7 @@ package com.acetutoring.api.controllers;
 import com.acetutoring.api.dto.*;
 import com.acetutoring.api.services.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ public class PublicApiController {
     private StudentService studentService;
     private UserService userService;
     private CustomerQueryService customerQueryService;
+    private AuthService authService;
 
     @GetMapping("/blogPost/{blogPostId}")
     public ResponseEntity<BlogPostDto> getBlogPostById(@PathVariable Long blogPostId) {
@@ -89,13 +91,6 @@ public class PublicApiController {
     @PostMapping("/enrollment")
     public ResponseEntity<EnrollmentDto> createEnrollment(
             @RequestBody EnrollmentDto enrollmentDto) {
-        System.out.println(
-                "[CUSTOM] PublicController.java, line-91, enrollmentDto.enrolledCourseId: "
-                        + enrollmentDto.getEnrolledCourseId());
-        AvailableCourseDto courseDto = availableCourseService
-                .getAvailableCourseById(enrollmentDto.getEnrolledCourseId());
-        System.out.println("[CUSTOM] PublicController.java, line-96, courseName: " + courseDto.getCourse().getCourseName());
-        System.out.println("[CUSTOM] PublicController.java, line-96, duration: " + courseDto.getDuration());
         return ResponseEntity.ok(enrollmentService.createEnrollment(enrollmentDto));
     }
 
@@ -114,6 +109,17 @@ public class PublicApiController {
     public String createCustomerQuery(@RequestBody CustomerQueryDto customerQueryDto){
         customerQueryService.createCustomerQuery(customerQueryDto);
         return "Customer query created.";
+    }
+
+    @PostMapping("/studentLogin")
+    public ResponseEntity<String> studentLogin(@RequestBody LoginDto loginDto){
+        return new ResponseEntity<>(authService.studentLogin(loginDto), HttpStatus.OK);
+    }
+
+    @PostMapping("/resetPassword/{email}")
+    public String resetPassword(@PathVariable String email){
+        authService.resetPassword(email);
+        return "Password reset successfully.";
     }
 
 }

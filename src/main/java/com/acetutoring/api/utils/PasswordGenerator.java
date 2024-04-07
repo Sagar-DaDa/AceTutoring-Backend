@@ -1,4 +1,4 @@
-package com.acetutoring.api.other_services;
+package com.acetutoring.api.utils;
 
 import org.springframework.stereotype.Service;
 

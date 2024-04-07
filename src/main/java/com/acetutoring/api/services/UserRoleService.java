@@ -1,6 +1,7 @@
 package com.acetutoring.api.services;
 
 import com.acetutoring.api.dto.UserRoleDto;
+import com.acetutoring.api.entities.UserRole;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface UserRoleService {
 
     UserRoleDto getUserRoleById(Long userRoleId);
 
-    UserRoleDto getUserRoleByRoleName(String roleName);
+    UserRole findByRoleName(String roleName);
 
     List<UserRoleDto> getAllUserRoles();
 

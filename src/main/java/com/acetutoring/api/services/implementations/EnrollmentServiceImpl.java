@@ -1,5 +1,6 @@
 package com.acetutoring.api.services.implementations;
 
+import com.acetutoring.api.dto.ConfirmEnrollmentDto;
 import com.acetutoring.api.dto.EnrollmentDto;
 import com.acetutoring.api.dto.StudentDto;
 import com.acetutoring.api.dto.UserDto;
@@ -9,8 +10,8 @@ import com.acetutoring.api.exceptions.ResourceNotFoundException;
 import com.acetutoring.api.mapper.AvailableCourseMapper;
 import com.acetutoring.api.mapper.EnrollmentMapper;
 import com.acetutoring.api.mapper.StudentMapper;
-import com.acetutoring.api.other_services.EmailSender;
-import com.acetutoring.api.other_services.PasswordGenerator;
+import com.acetutoring.api.utils.EmailSender;
+import com.acetutoring.api.utils.PasswordGenerator;
 import com.acetutoring.api.repositories.EnrollmentRepo;
 import com.acetutoring.api.services.*;
 import lombok.AllArgsConstructor;
@@ -53,8 +54,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                             enrollmentDto.getEnrolledStudent().getEmail(),
                             enrollmentDto.getEnrolledStudent().getEmail(),
                             enrollmentDto.getEnrolledStudent().getContactNumber(),
-                            password,
-                            userRoleService.getUserRoleByRoleName("Customer")
+                            password
                     )); //User created
             newStudent = enrollmentDto.getEnrolledStudent();
             newStudent.setUserId(newUser);
@@ -65,8 +65,8 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                     availableCourseService.getAvailableCourseById(enrollmentDto.getEnrolledCourseId())
             );
             newEnrollment.setEnrolledStudent(studentService.createStudent(newStudent));
-              newEnrolledStudent = enrollmentRepo
-                      .save(EnrollmentMapper.mapToEnrollment(newEnrollment)); //Enrollment created
+            newEnrolledStudent = enrollmentRepo
+                    .save(EnrollmentMapper.mapToEnrollment(newEnrollment)); //Enrollment created
         }
 
         String subject = "Welcome to Ace Tutoring";
@@ -166,5 +166,18 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 enrollmentRepo.save(enrollment);
             }
         }
+    }
+
+    @Override
+    public void confirmEnrollment(Long enrollmentId, ConfirmEnrollmentDto confirmEnrollmentDto) {
+        Enrollment foundEnrollment = enrollmentRepo.findById(enrollmentId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                "Enrollment not found. Invalid enrollment ID: " + enrollmentId
+                        )
+                );
+
+        System.out.println("[CUSTOM] startDate: " + confirmEnrollmentDto.getStartDate());
+        System.out.println("[CUSTOM] endDate: " + confirmEnrollmentDto.getEndDate());
     }
 }

@@ -1,5 +1,6 @@
 package com.acetutoring.api.services;
 
+import com.acetutoring.api.dto.ConfirmEnrollmentDto;
 import com.acetutoring.api.dto.EnrollmentDto;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface EnrollmentService {
     Long hasFinishedEnrollment(Long studentId);
 
     void checkAndUpdateEnrollments();
+
+    void confirmEnrollment(
+            Long enrollmentId,
+            ConfirmEnrollmentDto confirmEnrollmentDto);
 }

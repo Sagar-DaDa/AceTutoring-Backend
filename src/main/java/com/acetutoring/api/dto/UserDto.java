@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class UserDto {
     private String emailAddress;
     private String mobile;
     private String password;
-    private UserRoleDto role;
+    private Set<UserRole> roles;
     private Date createdAt;
     private Date updatedAt;
 
@@ -32,7 +33,6 @@ public class UserDto {
             String userName,
             String emailAddress,
             String mobile,
-            UserRoleDto role,
             Date createdAt,
             Date updatedAt) {
         this.id = id;
@@ -40,17 +40,20 @@ public class UserDto {
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.mobile = mobile;
-        this.role = role;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public UserDto(String fullName, String userName, String emailAddress, String mobile, String password, UserRoleDto role) {
+    public UserDto(
+            String fullName,
+            String userName,
+            String emailAddress,
+            String mobile,
+            String password) {
         this.fullName = fullName;
         this.userName = userName;
         this.emailAddress = emailAddress;
         this.mobile = mobile;
         this.password = password;
-        this.role = role;
     }
 }
