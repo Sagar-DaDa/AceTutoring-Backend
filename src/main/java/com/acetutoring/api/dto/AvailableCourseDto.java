@@ -19,6 +19,7 @@ public class AvailableCourseDto {
     private String classDays;
     private String classStartTime;
     private String classEndTime;
+    private double fees;
     private TutorDto tutor;
     private UserDto createdBy;
     private Date createdAt;

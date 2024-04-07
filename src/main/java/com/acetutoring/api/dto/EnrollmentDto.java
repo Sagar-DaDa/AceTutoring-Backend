@@ -20,6 +20,7 @@ public class EnrollmentDto {
     private Date courseStartDate;
     private Date courseEndDate;
     private boolean active;
+    private boolean finished;
     private Date createdAt;
     private Date updatedAt;
 
@@ -32,6 +33,7 @@ public class EnrollmentDto {
             Date courseStartDate,
             Date courseEndDate,
             boolean active,
+            boolean finished,
             Date createdAt,
             Date updatedAt) {
         this.id = id;
@@ -40,17 +42,24 @@ public class EnrollmentDto {
         this.courseStartDate = courseStartDate;
         this.courseEndDate = courseEndDate;
         this.active = active;
+        this.finished = finished;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public EnrollmentDto(AvailableCourseDto enrolledCourse, StudentDto enrolledStudent) {
-        this.enrolledCourse = enrolledCourse;
-        this.enrolledStudent = enrolledStudent;
     }
 
     public EnrollmentDto(Long enrolledCourseId, StudentDto enrolledStudent) {
         this.enrolledCourse = availableCourseService.getAvailableCourseById(enrolledCourseId);
         this.enrolledStudent = enrolledStudent;
+    }
+
+    public EnrollmentDto(
+            Long id,
+            AvailableCourseDto enrolledCourse,
+            boolean active,
+            boolean finished) {
+        this.id = id;
+        this.enrolledCourse = enrolledCourse;
+        this.active = active;
+        this.finished = finished;
     }
 }

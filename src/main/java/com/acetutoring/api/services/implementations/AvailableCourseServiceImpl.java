@@ -63,6 +63,7 @@ public class AvailableCourseServiceImpl implements AvailableCourseService {
         foundAvailableCourse.setClassDays(availableCourseDto.getClassDays());
         foundAvailableCourse.setClassStartTime(availableCourseDto.getClassStartTime());
         foundAvailableCourse.setClassEndTime(availableCourseDto.getClassEndTime());
+        foundAvailableCourse.setFees(availableCourseDto.getFees());
         foundAvailableCourse.setTutor(TutorMapper.mapToTutor(availableCourseDto.getTutor()));
         foundAvailableCourse.setCreatedBy(UserMapper.mapToUser(availableCourseDto.getCreatedBy()));
 

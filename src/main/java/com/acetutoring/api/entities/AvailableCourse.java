@@ -40,6 +40,8 @@ public class AvailableCourse {
     @Column(name = "class_end_time")
     private String classEndTime;
 
+    private double fees;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tutor")
     private Tutor tutor;

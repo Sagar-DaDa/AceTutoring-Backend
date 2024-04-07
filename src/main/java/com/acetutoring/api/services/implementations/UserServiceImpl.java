@@ -3,12 +3,14 @@ package com.acetutoring.api.services.implementations;
 import com.acetutoring.api.dto.UserDto;
 import com.acetutoring.api.entities.User;
 import com.acetutoring.api.exceptions.ResourceNotFoundException;
+import com.acetutoring.api.exceptions.UserApiException;
 import com.acetutoring.api.mapper.UserMapper;
 import com.acetutoring.api.mapper.UserRoleMapper;
 import com.acetutoring.api.repositories.UserRepo;
 import com.acetutoring.api.security.HashEncoder;
 import com.acetutoring.api.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
+        if (userRepo.existsByUserName(userDto.getUserName())){
+            throw new UserApiException(HttpStatus.BAD_REQUEST, "Username already exists.");
+        }
+
+        if (userRepo.existsByEmailAddress(userDto.getEmailAddress())){
+            throw new UserApiException(HttpStatus.BAD_REQUEST, "Email already exists.");
+        }
+
         User newUser = UserMapper.mapToUser(userDto);
         newUser.setPassword(HashEncoder.getEncryptedHash(userDto.getPassword()));
         return UserMapper.mapToUserDto(userRepo.save(newUser));

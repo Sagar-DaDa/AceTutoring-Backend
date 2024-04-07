@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.Date;
 
@@ -41,6 +42,7 @@ public class Enrollment {
     private Date courseEndDate;
 
     private boolean active = false;
+    private boolean finished = false;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -59,6 +61,7 @@ public class Enrollment {
             Date courseStartDate,
             Date courseEndDate,
             boolean active,
+            boolean finished,
             Date createdAt,
             Date updatedAt) {
         this.id = id;
@@ -67,6 +70,7 @@ public class Enrollment {
         this.courseStartDate = courseStartDate;
         this.courseEndDate = courseEndDate;
         this.active = active;
+        this.finished = finished;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

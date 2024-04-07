@@ -9,6 +9,8 @@ public interface EnrollmentService {
 
     EnrollmentDto getEnrollmentById(Long enrollmentId);
 
+    List<EnrollmentDto> getAllEnrollmentsByStudentId(Long studentId);
+
     List<EnrollmentDto> getAllEnrollment();
 
     EnrollmentDto updateEnrollmentById(Long enrollmentId, EnrollmentDto enrollmentDto);
@@ -16,4 +18,8 @@ public interface EnrollmentService {
     void deleteEnrollmentById(Long enrollmentId);
 
     Long hasActiveEnrollment(Long studentId);
+
+    Long hasFinishedEnrollment(Long studentId);
+
+    void checkAndUpdateEnrollments();
 }

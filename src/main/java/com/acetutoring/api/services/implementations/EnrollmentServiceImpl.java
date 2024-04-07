@@ -15,8 +15,10 @@ import com.acetutoring.api.repositories.EnrollmentRepo;
 import com.acetutoring.api.services.*;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -95,6 +97,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     }
 
     @Override
+    public List<EnrollmentDto> getAllEnrollmentsByStudentId(Long studentId) {
+        return enrollmentRepo.findAllEnrollmentsByStudentId(studentId)
+                .stream()
+                .map(EnrollmentMapper::mapObjectToEnrollmentDto)
+                .toList();
+    }
+
+    @Override
     public List<EnrollmentDto> getAllEnrollment() {
         return enrollmentRepo
                 .findAll()
@@ -118,6 +128,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         foundEnrollment.setCourseStartDate(enrollmentDto.getCourseStartDate());
         foundEnrollment.setCourseEndDate(enrollmentDto.getCourseEndDate());
         foundEnrollment.setActive(enrollmentDto.isActive());
+        foundEnrollment.setFinished(enrollmentDto.isFinished());
 
         return EnrollmentMapper.mapToEnrollmentDto(enrollmentRepo.save(foundEnrollment));
     }
@@ -136,5 +147,24 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     @Override
     public Long hasActiveEnrollment(Long studentId) {
         return enrollmentRepo.hasActiveEnrollment(studentId);
+    }
+
+    @Override
+    public Long hasFinishedEnrollment(Long studentId) {
+        return enrollmentRepo.hasFinishedEnrollment(studentId);
+    }
+
+    @Override
+    @Scheduled(fixedRate = 86400000)
+    public void checkAndUpdateEnrollments() {
+        List<Enrollment> enrollments = enrollmentRepo.findAll();
+        Date currentDate = new Date();
+        for (Enrollment enrollment : enrollments) {
+            if (enrollment.getCourseEndDate() != null && currentDate.after(enrollment.getCourseEndDate())) {
+                enrollment.setActive(false);
+                enrollment.setFinished(true);
+                enrollmentRepo.save(enrollment);
+            }
+        }
     }
 }
