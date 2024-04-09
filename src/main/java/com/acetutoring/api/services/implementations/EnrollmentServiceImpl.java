@@ -177,7 +177,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                         )
                 );
 
-        System.out.println("[CUSTOM] startDate: " + confirmEnrollmentDto.getStartDate());
-        System.out.println("[CUSTOM] endDate: " + confirmEnrollmentDto.getEndDate());
+        if(confirmEnrollmentDto.getStartDate().after(new Date())){
+            foundEnrollment.setCourseStartDate(confirmEnrollmentDto.getStartDate());
+            foundEnrollment.setCourseEndDate(confirmEnrollmentDto.getEndDate());
+            foundEnrollment.setActive(true);
+            enrollmentRepo.save(foundEnrollment);
+        }
     }
 }

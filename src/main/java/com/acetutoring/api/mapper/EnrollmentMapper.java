@@ -5,6 +5,8 @@ import com.acetutoring.api.dto.EnrollmentDto;
 import com.acetutoring.api.entities.AvailableCourse;
 import com.acetutoring.api.entities.Enrollment;
 
+import java.util.Date;
+
 public class EnrollmentMapper {
     public static EnrollmentDto mapToEnrollmentDto(Enrollment enrollment){
         return new EnrollmentDto(
@@ -38,8 +40,10 @@ public class EnrollmentMapper {
         return new EnrollmentDto(
                 (Long) object[0],
                 AvailableCourseMapper.mapToAvailableCourseDto((AvailableCourse) object[1]),
-                (Boolean) object[2],
-                (Boolean) object[3]
+                (Date) object[2],
+                (Date) object[3],
+                (Boolean) object[4],
+                (Boolean) object[5]
         );
     }
 }

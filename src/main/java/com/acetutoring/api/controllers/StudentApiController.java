@@ -1,11 +1,9 @@
 package com.acetutoring.api.controllers;
 
-import com.acetutoring.api.dto.ConfirmEnrollmentDto;
-import com.acetutoring.api.dto.EnrollmentDto;
-import com.acetutoring.api.dto.LoginDto;
-import com.acetutoring.api.dto.StudentDto;
+import com.acetutoring.api.dto.*;
 import com.acetutoring.api.services.AuthService;
 import com.acetutoring.api.services.EnrollmentService;
+import com.acetutoring.api.services.NoticeService;
 import com.acetutoring.api.services.StudentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @AllArgsConstructor
@@ -22,6 +21,7 @@ public class StudentApiController {
     private EnrollmentService enrollmentService;
     private AuthService authService;
     private StudentService studentService;
+    private NoticeService noticeService;
 
     @GetMapping("/hasActiveEnrollment/{studentId}")
     public Long hasActiveEnrollment(@PathVariable Long studentId){
@@ -55,5 +55,24 @@ public class StudentApiController {
     ){
         enrollmentService.confirmEnrollment(enrollmentId, confirmEnrollmentDto);
         return "Enrollment confirmed.";
+    }
+
+    @GetMapping("/notice/{noticeId}")
+    public ResponseEntity<NoticeDto> getNoticeById(@PathVariable Long noticeId){
+        return ResponseEntity.ok(noticeService.getNoticeById(noticeId));
+    }
+
+    @GetMapping("/notices")
+    public ResponseEntity<List<NoticeDto>> getAllNotices(){
+        return ResponseEntity.ok(noticeService.getAllNotice());
+    }
+
+    @PutMapping("/changeStudentPassword/{studentId}")
+    public String changeStudentPassword(
+            @PathVariable Long studentId,
+            @RequestBody Map<String, String> newPasswordMap){
+        authService.changeStudentPassword(studentId, newPasswordMap.get("newPassword"));
+
+        return "Password changed successfully";
     }
 }

@@ -4,6 +4,7 @@ import com.acetutoring.api.dto.LoginDto;
 import com.acetutoring.api.dto.UserDto;
 import com.acetutoring.api.entities.Student;
 import com.acetutoring.api.entities.User;
+import com.acetutoring.api.exceptions.ResourceNotFoundException;
 import com.acetutoring.api.repositories.StudentRepo;
 import com.acetutoring.api.repositories.UserRepo;
 import com.acetutoring.api.services.AuthService;
@@ -77,5 +78,55 @@ public class AuthServiceImpl implements AuthService {
                 "Ace Tutoring";
 
         emailSender.sendMail(email, subject, body); //Email sent
+    }
+
+    @Override
+    public void changePassword(Long userId, String newPassword) {
+        User foundUser = userRepo.findById(userId).orElseThrow(() -> new UsernameNotFoundException(
+                "User not found. Invalid user ID:" + userId
+        ));
+
+        foundUser.setPassword(PasswordEncoderImpl.encode(newPassword));
+
+        userRepo.save(foundUser);
+
+        String subject = "Password Changed";
+        String body = """
+                Dear User,
+
+                Your password has been changed!
+
+
+
+                Best regards,
+                Ace Tutoring""";
+
+        emailSender.sendMail(foundUser.getEmailAddress(), subject, body);
+    }
+
+    @Override
+    public void changeStudentPassword(Long studentId, String newPassword) {
+        Student foundStudent = studentRepo.findById(studentId).orElseThrow(
+                () -> new ResourceNotFoundException(
+                        "Student not found. Invalid student ID: " + studentId
+                )
+        );
+
+        User user = foundStudent.getUserId();
+        user.setPassword(PasswordEncoderImpl.encode(newPassword));
+        userRepo.save(user);
+
+        String subject = "Password Changed";
+        String body = """
+                Dear User,
+
+                Your password has been changed!
+
+
+
+                Best regards,
+                Ace Tutoring""";
+
+        emailSender.sendMail(user.getEmailAddress(), subject, body);
     }
 }

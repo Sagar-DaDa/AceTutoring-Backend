@@ -7,4 +7,9 @@ public interface AuthService {
     String studentLogin(LoginDto loginDto);
 
     void resetPassword(String email);
+
+    void changePassword(Long userId, String newPassword);
+
+    void changeStudentPassword(Long studentId, String newPassword);
+
 }

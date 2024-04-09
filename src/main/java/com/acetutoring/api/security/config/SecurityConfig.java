@@ -33,6 +33,8 @@ public class SecurityConfig {
                     authorize.requestMatchers(HttpMethod.POST, "/public/api/**").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.GET, "/student/api/**").hasRole("CUSTOMER");
+                    authorize.requestMatchers(HttpMethod.POST, "/student/api/**").hasRole("CUSTOMER");
+                    authorize.requestMatchers(HttpMethod.PUT, "/student/api/**").hasRole("CUSTOMER");
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/student/api/**").hasRole("CUSTOMER");
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());

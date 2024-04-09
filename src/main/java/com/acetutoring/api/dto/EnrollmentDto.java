@@ -55,10 +55,14 @@ public class EnrollmentDto {
     public EnrollmentDto(
             Long id,
             AvailableCourseDto enrolledCourse,
+            Date courseStartDate,
+            Date courseEndDate,
             boolean active,
             boolean finished) {
         this.id = id;
         this.enrolledCourse = enrolledCourse;
+        this.courseStartDate = courseStartDate;
+        this.courseEndDate = courseEndDate;
         this.active = active;
         this.finished = finished;
     }
