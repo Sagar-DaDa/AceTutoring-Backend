@@ -31,7 +31,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> {
                     authorize.requestMatchers(HttpMethod.GET, "/public/api/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST, "/public/api/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.POST, "/api/courses/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/api/courses/**").permitAll();
                     authorize.requestMatchers(HttpMethod.GET, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.POST, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.PUT, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.OPTIONS, "/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.GET, "/admin/api/**").hasRole("ADMIN");
+                    authorize.requestMatchers(HttpMethod.POST, "/admin/api/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.GET, "/student/api/**").hasRole("CUSTOMER");
                     authorize.requestMatchers(HttpMethod.POST, "/student/api/**").hasRole("CUSTOMER");
                     authorize.requestMatchers(HttpMethod.PUT, "/student/api/**").hasRole("CUSTOMER");

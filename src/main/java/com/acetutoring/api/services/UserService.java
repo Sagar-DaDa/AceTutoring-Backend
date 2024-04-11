@@ -18,4 +18,6 @@ public interface UserService {
 
     boolean isUserExistsWithEmail(String emailAddress);
 
+    Long totalUsersCount();
+
 }

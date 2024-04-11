@@ -15,4 +15,8 @@ public interface CourseService {
     CourseDto updateCourse(Long courseId, CourseDto courseDto);
 
     void deleteCourse(Long courseId);
+
+    Long totalCoursesCount();
+
+    boolean isCourseCodeExists(String courseCode);
 }

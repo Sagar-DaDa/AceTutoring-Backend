@@ -9,43 +9,28 @@ import java.util.Date;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "available_courses")
-public class AvailableCourse {
+@Table(name = "scores")
+public class Score {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course")
+    @JoinColumn(name = "student_id")
+    private Student student;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
     private Course course;
 
-    @Column(name = "duration")
-    private String duration;
+    @Column(name = "total_questions")
+    private int totalQuestions;
 
-    @Column(name = "category")
-    private String category;
-
-    @Column(name = "class_days")
-    private String classDays;
-
-    @Column(name = "class_start_time")
-    private String classStartTime;
-
-    @Column(name = "class_end_time")
-    private String classEndTime;
-
-    private double fees;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tutor")
-    private Tutor tutor;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by")
-    private User createdBy;
+    @Column(name = "correct_answered")
+    private int correctAnswered;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

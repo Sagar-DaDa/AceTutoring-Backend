@@ -75,4 +75,13 @@ public class StudentApiController {
 
         return "Password changed successfully";
     }
+
+    @PostMapping("/newEnrollmentForExistingStudent")
+    public String createNewEnrollmentForExistingStudent(
+            @RequestBody EnrollmentForExistingStudentDto enrollmentForExistingStudentDto
+    ){
+        enrollmentService.createdNewEnrollmentForExistingStudent(enrollmentForExistingStudentDto);
+
+        return "New enrollment created successfully.";
+    }
 }

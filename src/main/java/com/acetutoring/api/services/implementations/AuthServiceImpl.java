@@ -57,6 +57,26 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public String adminLogin(LoginDto loginDto) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginDto.getUsernameOrEmail(),
+                        loginDto.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        User user = userRepo.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException(
+                        "User not found. Invalid user email."
+                ));
+        // Get the logged-in user's ID
+        return String.valueOf(user.getId());
+    }
+
+    @Override
     public void resetPassword(String email) {
         User foundUser = userRepo.findByUserName(email).orElseThrow(() -> new UsernameNotFoundException(
                 "User not found. Invalid user email."

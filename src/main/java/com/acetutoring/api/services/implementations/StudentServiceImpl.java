@@ -77,4 +77,9 @@ public class StudentServiceImpl implements StudentService {
     public boolean isStudentExistsWithEmail(String email) {
         return studentRepo.findByEmail(email).isPresent();
     }
+
+    @Override
+    public Long totalStudentCount() {
+        return studentRepo.count();
+    }
 }

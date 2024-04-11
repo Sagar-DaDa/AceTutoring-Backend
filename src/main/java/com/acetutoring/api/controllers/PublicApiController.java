@@ -2,11 +2,19 @@ package com.acetutoring.api.controllers;
 
 import com.acetutoring.api.dto.*;
 import com.acetutoring.api.services.*;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,6 +23,7 @@ import java.util.Map;
 @CrossOrigin
 @AllArgsConstructor
 @RestController
+@NoArgsConstructor
 @RequestMapping("/public/api")
 public class PublicApiController {
     private BlogPostService blogPostService;
@@ -26,6 +35,12 @@ public class PublicApiController {
     private UserService userService;
     private CustomerQueryService customerQueryService;
     private AuthService authService;
+
+    @Autowired
+    private FileService fileService;
+
+    @Value("${project.image}")
+    private String path;
 
     @GetMapping("/blogPost/{blogPostId}")
     public ResponseEntity<BlogPostDto> getBlogPostById(@PathVariable Long blogPostId) {
@@ -116,10 +131,26 @@ public class PublicApiController {
         return new ResponseEntity<>(authService.studentLogin(loginDto), HttpStatus.OK);
     }
 
+    @PostMapping("/adminLogin")
+    public ResponseEntity<String> adminLogin(@RequestBody LoginDto loginDto){
+        return new ResponseEntity<>(authService.adminLogin(loginDto), HttpStatus.OK);
+    }
+
     @PostMapping("/resetPassword/{email}")
     public String resetPassword(@PathVariable String email){
         authService.resetPassword(email);
         return "Password reset successfully.";
+    }
+
+    @GetMapping(value = "/images/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public void getImageResource(
+            @PathVariable String imageName,
+            HttpServletResponse response
+    ) throws IOException {
+        InputStream resource = fileService.getImageResource(path, imageName);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+
+        StreamUtils.copy(resource, response.getOutputStream());;
     }
 
 }

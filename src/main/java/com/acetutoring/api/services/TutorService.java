@@ -14,4 +14,6 @@ public interface TutorService {
      TutorDto updateTutor(Long tutorId, TutorDto tutorDto);
 
      void deleteTutor(Long tutorId);
+
+     Long totalTutorCount();
 }

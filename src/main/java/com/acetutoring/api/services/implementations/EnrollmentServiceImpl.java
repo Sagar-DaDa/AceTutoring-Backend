@@ -1,9 +1,6 @@
 package com.acetutoring.api.services.implementations;
 
-import com.acetutoring.api.dto.ConfirmEnrollmentDto;
-import com.acetutoring.api.dto.EnrollmentDto;
-import com.acetutoring.api.dto.StudentDto;
-import com.acetutoring.api.dto.UserDto;
+import com.acetutoring.api.dto.*;
 import com.acetutoring.api.entities.Enrollment;
 import com.acetutoring.api.exceptions.EmailAlreadyExistsException;
 import com.acetutoring.api.exceptions.ResourceNotFoundException;
@@ -183,5 +180,62 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             foundEnrollment.setActive(true);
             enrollmentRepo.save(foundEnrollment);
         }
+    }
+
+    @Override
+    public void createdNewEnrollmentForExistingStudent(
+            EnrollmentForExistingStudentDto enrollmentForExistingStudentDto) {
+
+        StudentDto foundStudent = studentService.getStudentById(enrollmentForExistingStudentDto.getStudentId());
+        AvailableCourseDto foundAvailableCourse = availableCourseService
+                .getAvailableCourseById(enrollmentForExistingStudentDto.getAvailableCourseId());
+
+        EnrollmentDto newEnrollment = new EnrollmentDto();
+
+        newEnrollment.setEnrolledStudent(foundStudent);
+        newEnrollment.setEnrolledCourse(foundAvailableCourse);
+        newEnrollment.setCourseStartDate(enrollmentForExistingStudentDto.getCourseStartDate());
+        newEnrollment.setCourseEndDate(enrollmentForExistingStudentDto.getCourseEndDate());
+        newEnrollment.setActive(true);
+
+        Enrollment enrollment = enrollmentRepo.save(EnrollmentMapper.mapToEnrollment(newEnrollment));
+
+        String subject = "New Course Enrolled";
+        String body = "Dear User,\n\n" +
+                "You have enrolled new course!\n\n" +
+                "Enrollment details are as below:\n" +
+                "Course: " + foundAvailableCourse.getCourse().getCourseName() + "\n" +
+                "Grade: " + foundAvailableCourse.getCourse().getGrade() + "\n" +
+                "Duration: " + foundAvailableCourse.getDuration() + "\n" +
+                "Class days: " + foundAvailableCourse.getClassDays() + "\n" +
+                "Class start time: " + foundAvailableCourse.getClassStartTime() + "\n" +
+                "Class end time: " + foundAvailableCourse.getClassEndTime() + "\n" +
+                "Class start date: " + newEnrollment.getCourseStartDate() + "\n" +
+                "Class end date: " + newEnrollment.getCourseEndDate() + "\n\n" +
+                "Please login to your account for more information.\n\n\n\n" +
+                "Best regards,\n" +
+                "Ace Tutoring";
+
+        emailSender.sendMail(foundStudent.getEmail(), subject, body);
+    }
+
+    @Override
+    public Long totalActiveEnrollmentsCount() {
+        return enrollmentRepo.countByActiveTrue();
+    }
+
+    @Override
+    public Long totalInactiveEnrollmentsCount() {
+        return enrollmentRepo.countByActiveFalse();
+    }
+
+    @Override
+    public List<Object[]> getEnrollmentsByDateRange(Date startDate, Date endDate) {
+        return enrollmentRepo.countEnrollmentsByDateRange(startDate, endDate);
+    }
+
+    @Override
+    public List<Object[]> getEnrollmentsByCategory() {
+        return enrollmentRepo.countEnrollmentsByCategory();
     }
 }

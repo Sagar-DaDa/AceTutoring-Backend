@@ -14,4 +14,6 @@ public interface AvailableCourseService {
     AvailableCourseDto updateAvailableCourseById(Long availableCourseId, AvailableCourseDto availableCourseDto);
 
     void deleteAvailableCourseById(Long availableCourseId);
+
+    Long totalAvailableCoursesCount();
 }

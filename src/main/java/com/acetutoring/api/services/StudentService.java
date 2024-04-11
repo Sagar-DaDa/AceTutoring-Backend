@@ -19,5 +19,7 @@ public interface StudentService {
 
     boolean isStudentExistsWithEmail(String email);
 
+    Long totalStudentCount();
+
 
 }

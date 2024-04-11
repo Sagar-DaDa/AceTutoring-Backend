@@ -28,4 +28,11 @@ public class CourseDto {
         this.grade = grade;
         this.imageUrl = imageUrl;
     }
+
+    public CourseDto(String courseCode, String courseName, String description, String grade) {
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.description = description;
+        this.grade = grade;
+    }
 }

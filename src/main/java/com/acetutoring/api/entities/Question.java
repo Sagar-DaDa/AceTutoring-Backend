@@ -1,47 +1,42 @@
 package com.acetutoring.api.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "available_courses")
-public class AvailableCourse {
+@Table(name = "questions")
+public class Question {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course")
+    @JoinColumn(name = "course_id")
     private Course course;
 
-    @Column(name = "duration")
-    private String duration;
+    @Column(length = 500)
+    private String question;
 
-    @Column(name = "category")
-    private String category;
+    @Column(length = 500)
+    private List<String> options;
 
-    @Column(name = "class_days")
-    private String classDays;
+    @Column(length = 500)
+    private String answer;
 
-    @Column(name = "class_start_time")
-    private String classStartTime;
-
-    @Column(name = "class_end_time")
-    private String classEndTime;
-
-    private double fees;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tutor")
-    private Tutor tutor;
+    private boolean published;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
@@ -56,4 +51,5 @@ public class AvailableCourse {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
 }

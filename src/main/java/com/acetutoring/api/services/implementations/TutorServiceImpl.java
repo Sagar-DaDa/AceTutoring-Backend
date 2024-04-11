@@ -64,5 +64,10 @@ public class TutorServiceImpl implements TutorService {
         tutorRepo.deleteById(tutorId);
     }
 
+    @Override
+    public Long totalTutorCount() {
+        return tutorRepo.count();
+    }
+
 
 }

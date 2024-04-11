@@ -16,6 +16,7 @@ import com.acetutoring.api.services.UserService;
 import com.acetutoring.api.utils.PasswordEncoderImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -52,7 +53,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserById(Long userId) {
-        return null;
+        User foundUser = userRepo.findById(userId).orElseThrow(
+                () -> new UsernameNotFoundException(
+                        "User not found. Invalid user ID: " + userId
+                )
+        );
+
+        return new UserDto(
+                foundUser.getId(),
+                foundUser.getFullName(),
+                foundUser.getUserName(),
+                foundUser.getEmailAddress(),
+                foundUser.getMobile(),
+                foundUser.getCreatedAt(),
+                foundUser.getUpdatedAt()
+        );
     }
 
     @Override
@@ -73,6 +88,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isUserExistsWithEmail(String emailAddress) {
         return false;
+    }
+
+    @Override
+    public Long totalUsersCount() {
+        return userRepo.count();
     }
 
 //    @Override

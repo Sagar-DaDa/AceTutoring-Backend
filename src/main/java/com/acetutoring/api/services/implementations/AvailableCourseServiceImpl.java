@@ -80,4 +80,9 @@ public class AvailableCourseServiceImpl implements AvailableCourseService {
                 );
         availableCourseRepo.delete(foundAvailableCourse);
     }
+
+    @Override
+    public Long totalAvailableCoursesCount() {
+        return availableCourseRepo.count();
+    }
 }

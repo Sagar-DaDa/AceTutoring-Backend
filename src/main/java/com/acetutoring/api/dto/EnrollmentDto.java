@@ -66,4 +66,6 @@ public class EnrollmentDto {
         this.active = active;
         this.finished = finished;
     }
+
+
 }

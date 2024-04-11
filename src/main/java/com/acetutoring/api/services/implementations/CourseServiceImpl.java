@@ -2,6 +2,7 @@ package com.acetutoring.api.services.implementations;
 
 import com.acetutoring.api.dto.CourseDto;
 import com.acetutoring.api.entities.Course;
+import com.acetutoring.api.exceptions.CourseCodeAlreadyExistsException;
 import com.acetutoring.api.exceptions.ResourceNotFoundException;
 import com.acetutoring.api.mapper.CourseMapper;
 import com.acetutoring.api.repositories.CourseRepo;
@@ -60,6 +61,16 @@ public class CourseServiceImpl implements CourseService {
                         () -> new ResourceNotFoundException("Course not found. Invalid course ID: " + courseId)
                 );
         courseRepo.delete(foundCourse);
+    }
+
+    @Override
+    public Long totalCoursesCount() {
+        return courseRepo.count();
+    }
+
+    @Override
+    public boolean isCourseCodeExists(String courseCode) {
+        return courseRepo.findByCourseCode(courseCode).isPresent();
     }
 
 
