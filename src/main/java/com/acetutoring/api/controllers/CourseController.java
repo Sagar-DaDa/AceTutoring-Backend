@@ -31,6 +31,9 @@ public class CourseController {
     @Value("${project.image}")
     private String path;
 
+    @Value("${project.imageBaseUrl}")
+    private String imageBaseUrl;
+
     @PostMapping("/createCourse")
     public ResponseEntity<CourseDto> createCourse(
             @RequestParam("courseCode") String courseCode,
@@ -58,7 +61,7 @@ public class CourseController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        courseDto.setImageUrl("http://192.168.1.76:8080/public/api/images/" + courseImageName);
+        courseDto.setImageUrl(imageBaseUrl + courseImageName);
 
         return ResponseEntity.ok(courseService.createCourse(courseDto));
     }
@@ -97,7 +100,7 @@ public class CourseController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            courseDto.setImageUrl("http://192.168.1.76:8080/public/api/images/" + courseImageName);
+            courseDto.setImageUrl(imageBaseUrl + courseImageName);
         }
 
         return ResponseEntity.ok(courseService.updateCourse(courseId, courseDto));

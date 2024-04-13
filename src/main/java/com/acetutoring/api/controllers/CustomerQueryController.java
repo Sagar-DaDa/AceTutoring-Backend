@@ -26,7 +26,7 @@ public class CustomerQueryController {
         return ResponseEntity.ok(customerQueryService.getCustomerQueryById(customerQueryId));
     }
 
-    @PutMapping("{customerQueryId}")
+    @DeleteMapping("/deleteCustomerQuery/{customerQueryId}")
     public String deleteCustomerQueryById(@PathVariable Long customerQueryId){
         customerQueryService.deleteCustomerQueryById(customerQueryId);
         return "Customer query deleted successfully.";

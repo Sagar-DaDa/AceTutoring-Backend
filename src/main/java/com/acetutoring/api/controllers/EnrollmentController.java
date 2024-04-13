@@ -40,7 +40,7 @@ public class EnrollmentController {
         return ResponseEntity.ok(enrollmentService.updateEnrollmentById(enrollmentId, enrollmentDto));
     }
 
-    @DeleteMapping("{enrollmentId}")
+    @DeleteMapping("/deleteEnrollment/{enrollmentId}")
     public String deleteEnrollmentById(@PathVariable Long enrollmentId){
         enrollmentService.deleteEnrollmentById(enrollmentId);
         return "Enrollment deleted successfully.";

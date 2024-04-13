@@ -19,4 +19,9 @@ public class NoticeDto {
     private UserDto createdBy;
     private Date createdAt;
     private Date updatedAt;
+
+    public NoticeDto(String title, String message) {
+        this.title = title;
+        this.message = message;
+    }
 }

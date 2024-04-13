@@ -32,12 +32,12 @@ public class UserServiceImpl implements UserService {
     private UserRoleService userRoleService;
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        if (userRepo.existsByUserName(userDto.getUserName())){
+    public UserDto createCustomer(UserDto userDto) {
+        if (userRepo.existsByUserName(userDto.getUserName())) {
             throw new UserApiException(HttpStatus.BAD_REQUEST, "Username already exists.");
         }
 
-        if (userRepo.existsByEmailAddress(userDto.getEmailAddress())){
+        if (userRepo.existsByEmailAddress(userDto.getEmailAddress())) {
             throw new UserApiException(HttpStatus.BAD_REQUEST, "Email already exists.");
         }
 
@@ -46,6 +46,26 @@ public class UserServiceImpl implements UserService {
 
         Set<UserRole> roles = new HashSet<>();
         roles.add(userRoleService.findByRoleName(UserRoleEnum.ROLE_CUSTOMER.toString()));
+        newUser.setRoles(roles);
+
+        return UserMapper.mapToUserDto(userRepo.save(newUser));
+    }
+
+    @Override
+    public UserDto createUser(UserDto userDto) {
+        if (userRepo.existsByUserName(userDto.getUserName())) {
+            throw new UserApiException(HttpStatus.BAD_REQUEST, "Username already exists.");
+        }
+
+        if (userRepo.existsByEmailAddress(userDto.getEmailAddress())) {
+            throw new UserApiException(HttpStatus.BAD_REQUEST, "Email already exists.");
+        }
+
+        User newUser = UserMapper.mapToUser(userDto);
+        newUser.setPassword(PasswordEncoderImpl.encode(userDto.getPassword()));
+
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(userRoleService.findByRoleName(UserRoleEnum.ROLE_OPERATOR.toString()));
         newUser.setRoles(roles);
 
         return UserMapper.mapToUserDto(userRepo.save(newUser));
@@ -72,7 +92,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllUsers() {
-        return List.of();
+        return userRepo
+                .findAll()
+                .stream()
+                .map(UserMapper::mapToUserDto)
+                .toList();
     }
 
     @Override
@@ -82,7 +106,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
+        User foundUser = userRepo.findById(userId).orElseThrow(
+                () -> new UsernameNotFoundException(
+                        "User not found. Invalid user ID: " + userId
+                )
+        );
 
+        userRepo.delete(foundUser);
     }
 
     @Override

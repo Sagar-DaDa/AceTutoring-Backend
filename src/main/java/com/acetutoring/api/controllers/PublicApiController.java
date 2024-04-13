@@ -26,14 +26,32 @@ import java.util.Map;
 @NoArgsConstructor
 @RequestMapping("/public/api")
 public class PublicApiController {
+
+    @Autowired
     private BlogPostService blogPostService;
+
+    @Autowired
     private TutorService tutorService;
+
+    @Autowired
     private TestimonialService testimonialService;
+
+    @Autowired
     private AvailableCourseService availableCourseService;
+
+    @Autowired
     private EnrollmentService enrollmentService;
+
+    @Autowired
     private StudentService studentService;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
     private CustomerQueryService customerQueryService;
+
+    @Autowired
     private AuthService authService;
 
     @Autowired

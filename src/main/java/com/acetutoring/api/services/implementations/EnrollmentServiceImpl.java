@@ -45,7 +45,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         } else {
             password = PasswordGenerator.generatePassword();
 
-            newUser = userService.createUser(
+            newUser = userService.createCustomer(
                     new UserDto(
                             enrollmentDto.getEnrolledStudent().getStudentName(),
                             enrollmentDto.getEnrolledStudent().getEmail(),

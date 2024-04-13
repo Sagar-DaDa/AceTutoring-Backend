@@ -16,7 +16,7 @@ import java.util.List;
 public class UserController {
     private UserService userService;
 
-    @PostMapping
+    @PostMapping("/createUser")
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
         return new ResponseEntity<>(userService.createUser(userDto), HttpStatus.CREATED);
     }
@@ -31,14 +31,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @PutMapping("{userId}")
+    @PutMapping("/updateUser/{userId}")
     public ResponseEntity<UserDto> updateUserById(
             @PathVariable Long userId,
             @RequestBody UserDto userDto){
         return ResponseEntity.ok(userService.updateUser(userId, userDto));
     }
 
-    @DeleteMapping("{userId}")
+    @DeleteMapping("/deleteUser/{userId}")
     public String deleteUserById(@PathVariable Long userId){
         userService.deleteUser(userId);
         return "User deleted successfully.";

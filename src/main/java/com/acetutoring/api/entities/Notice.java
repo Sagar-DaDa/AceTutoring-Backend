@@ -22,6 +22,8 @@ public class Notice {
     private Long id;
 
     private String title;
+
+    @Column(length = 1000)
     private String message;
 
     @ManyToOne(fetch = FetchType.LAZY)

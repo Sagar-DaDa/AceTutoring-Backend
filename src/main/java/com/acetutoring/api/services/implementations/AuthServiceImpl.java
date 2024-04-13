@@ -14,6 +14,7 @@ import com.acetutoring.api.utils.PasswordEncoderImpl;
 import com.acetutoring.api.utils.PasswordGenerator;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -72,6 +73,16 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User not found. Invalid user email."
                 ));
+
+        boolean isAdminOrOperator = user.getRoles().stream()
+                .anyMatch(
+                        role -> "ROLE_ADMIN".equals(role.getRoleName())
+                                || "ROLE_OPERATOR".equals(role.getRoleName())
+                );
+
+        if (!isAdminOrOperator) {
+            throw new AccessDeniedException("Access is denied");
+        }
         // Get the logged-in user's ID
         return String.valueOf(user.getId());
     }

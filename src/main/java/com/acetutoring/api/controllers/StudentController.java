@@ -25,7 +25,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
-    @DeleteMapping("{studentId}")
+    @DeleteMapping("/deleteStudent/{studentId}")
     public String deleteStudentById(@PathVariable Long studentId){
         studentService.deleteStudentById(studentId);
 

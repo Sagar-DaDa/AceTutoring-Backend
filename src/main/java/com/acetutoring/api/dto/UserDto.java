@@ -33,6 +33,25 @@ public class UserDto {
             String userName,
             String emailAddress,
             String mobile,
+            Set<UserRole> roles,
+            Date createdAt,
+            Date updatedAt) {
+        this.id = id;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.emailAddress = emailAddress;
+        this.mobile = mobile;
+        this.roles = roles;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public UserDto(
+            Long id,
+            String fullName,
+            String userName,
+            String emailAddress,
+            String mobile,
             Date createdAt,
             Date updatedAt) {
         this.id = id;
