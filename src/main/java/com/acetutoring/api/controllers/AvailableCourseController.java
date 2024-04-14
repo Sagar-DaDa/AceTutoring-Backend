@@ -2,6 +2,8 @@ package com.acetutoring.api.controllers;
 
 import com.acetutoring.api.dto.AvailableCourseDto;
 import com.acetutoring.api.services.AvailableCourseService;
+import com.acetutoring.api.services.CourseService;
+import com.acetutoring.api.services.TutorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +18,37 @@ public class AvailableCourseController {
 
     private AvailableCourseService availableCourseService;
 
-    @PostMapping
+    private CourseService courseService;
+
+    private TutorService tutorService;
+
+    @PostMapping("/launchCourse")
     public ResponseEntity<AvailableCourseDto> createAvailableCourse(
-            @RequestBody AvailableCourseDto availableCourseDto){
+            @RequestParam("courseId") String courseId,
+            @RequestParam("duration") String duration,
+            @RequestParam("category") String category,
+            @RequestParam("classDays") String classDays,
+            @RequestParam("classStartTime") String classStartTime,
+            @RequestParam("classEndTime") String classEndTime,
+            @RequestParam("fees") String fees,
+            @RequestParam("tutorId") String tutorId
+    ){
+
+        AvailableCourseDto availableCourseDto = new AvailableCourseDto();
+        availableCourseDto.setDuration(duration);
+        availableCourseDto.setCategory(category);
+        availableCourseDto.setClassDays(classDays);
+        availableCourseDto.setClassStartTime(classStartTime);
+        availableCourseDto.setClassEndTime(classEndTime);
+
+        Long tutor = Long.parseLong(tutorId);
+        Long course = Long.parseLong(courseId);
+        double fee = Double.parseDouble(fees);
+
+        availableCourseDto.setTutor(tutorService.getTutorById(tutor));
+        availableCourseDto.setCourse(courseService.getCourseById(course));
+        availableCourseDto.setFees(fee);
+
         return ResponseEntity.ok(availableCourseService.createAvailableCourse(availableCourseDto));
     }
 
@@ -39,5 +69,12 @@ public class AvailableCourseController {
         return ResponseEntity.ok(availableCourseService.updateAvailableCourseById(
                 availableCourseId, availableCourseDto
         ));
+    }
+
+    @DeleteMapping("/deleteAvailableCourse/{availableCourseId}")
+    public String deleteAvailableCourse(@PathVariable Long availableCourseId){
+        availableCourseService.deleteAvailableCourseById(availableCourseId);
+
+        return "Course deleted successfully";
     }
 }

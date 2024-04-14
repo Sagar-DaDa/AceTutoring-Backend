@@ -60,6 +60,9 @@ public class PublicApiController {
     @Value("${project.image}")
     private String path;
 
+    @Value("${project.file}")
+    private String filePath;
+
     @GetMapping("/blogPost/{blogPostId}")
     public ResponseEntity<BlogPostDto> getBlogPostById(@PathVariable Long blogPostId) {
         return ResponseEntity.ok(blogPostService.getBlogPostByIdPublic(blogPostId));
@@ -169,6 +172,22 @@ public class PublicApiController {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 
         StreamUtils.copy(resource, response.getOutputStream());;
+    }
+
+    @GetMapping("/getPopularCourses")
+    public ResponseEntity<List<AvailableCourseDto>> getTopFourPopularCourses(){
+        return ResponseEntity.ok(availableCourseService.getPopularCourses(4));
+    }
+
+    @GetMapping(value = "/file/{pdfName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public void getTimetable(
+            @PathVariable String pdfName,
+            HttpServletResponse response
+    ) throws IOException {
+        InputStream resource = fileService.getTimetable(filePath, pdfName);
+        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+
+        StreamUtils.copy(resource, response.getOutputStream());
     }
 
 }

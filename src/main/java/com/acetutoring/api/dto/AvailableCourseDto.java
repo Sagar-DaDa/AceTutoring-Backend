@@ -28,4 +28,9 @@ public class AvailableCourseDto {
     public AvailableCourseDto(Long id) {
         this.id = id;
     }
+
+    public AvailableCourseDto(Long id, CourseDto course) {
+        this.id = id;
+        this.course = course;
+    }
 }

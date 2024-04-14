@@ -16,4 +16,6 @@ public interface AvailableCourseService {
     void deleteAvailableCourseById(Long availableCourseId);
 
     Long totalAvailableCoursesCount();
+
+    List<AvailableCourseDto> getPopularCourses(int limit);
 }
