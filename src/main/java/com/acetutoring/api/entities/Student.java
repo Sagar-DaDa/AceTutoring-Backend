@@ -27,6 +27,9 @@ public class Student {
     @Column(name = "parent_name")
     private String parentName;
 
+    @Column(name = "parent_email")
+    private String parentEmail;
+
     @Column(name = "contact_number")
     private String contactNumber;
 

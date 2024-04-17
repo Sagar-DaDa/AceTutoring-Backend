@@ -190,4 +190,17 @@ public class PublicApiController {
         StreamUtils.copy(resource, response.getOutputStream());
     }
 
+    @GetMapping("/isAdminExists")
+    public boolean isAdminExists(){
+        return userService.isAdminExists();
+    }
+
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<UserDto> createAdmin(@RequestBody Map<String, String> requestBody){
+        String adminEmail = requestBody.get("adminEmail");
+        return new ResponseEntity<>(userService.createAdmin(adminEmail), HttpStatus.CREATED);
+    }
+
+
+
 }

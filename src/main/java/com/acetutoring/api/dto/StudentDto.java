@@ -18,6 +18,7 @@ public class StudentDto {
     private Long id;
     private String studentName;
     private String parentName;
+    private String parentEmail;
     private String contactNumber;
     private String email;
     private String school;
@@ -28,32 +29,66 @@ public class StudentDto {
     private Date updatedAt;
 
     public StudentDto(
-            String studentName,
-            String parentName,
-            String contactNumber,
-            String email,
-            String school,
-            String additionalInformation) {
-        this.studentName = studentName;
-        this.parentName = parentName;
-        this.contactNumber = contactNumber;
-        this.email = email;
-        this.school = school;
-        this.additionalInformation = additionalInformation;
-    }
-
-    public StudentDto(
             Long id,
             String studentName,
             String parentName,
+            String parentEmail,
             String contactNumber,
             String email,
             String school) {
         this.id = id;
         this.studentName = studentName;
         this.parentName = parentName;
+        this.parentEmail = parentEmail;
         this.contactNumber = contactNumber;
         this.email = email;
         this.school = school;
     }
+
+    public StudentDto(
+            String studentName,
+            String parentName,
+            String parentEmail,
+            String contactNumber,
+            String email,
+            String school,
+            String additionalInformation) {
+        this.studentName = studentName;
+        this.parentName = parentName;
+        this.parentEmail = parentEmail;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.school = school;
+        this.additionalInformation = additionalInformation;
+    }
+//
+//    public StudentDto(
+//            String studentName,
+//            String parentName,
+//            String contactNumber,
+//            String email,
+//            String school,
+//            String additionalInformation) {
+//        this.studentName = studentName;
+//        this.parentName = parentName;
+//        this.contactNumber = contactNumber;
+//        this.email = email;
+//        this.school = school;
+//        this.additionalInformation = additionalInformation;
+//    }
+
+//    public StudentDto(
+//            Long id,
+//            String studentName,
+//            String parentName,
+//            String contactNumber,
+//            String email,
+//            String school) {
+//        this.id = id;
+//        this.studentName = studentName;
+//        this.parentName = parentName;
+//        this.contactNumber = contactNumber;
+//        this.email = email;
+//        this.school = school;
+//    }
 }

@@ -6,6 +6,7 @@ import com.acetutoring.api.dto.TotalCountsDto;
 import com.acetutoring.api.dto.UserDto;
 import com.acetutoring.api.entities.AceFile;
 import com.acetutoring.api.services.*;
+import com.acetutoring.api.utils.EmailSender;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,8 @@ public class AdminApiController {
     private AuthService authService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    EmailSender emailSender;
 
     @Value("${project.file}")
     private String path;
@@ -107,6 +110,17 @@ public class AdminApiController {
     @GetMapping("/latestTimetable")
     public ResponseEntity<AceFileDto> getLatestTimetable(){
         return ResponseEntity.ok(fileService.getLatestTimetable());
+    }
+
+    @PostMapping("/sendStudentReport")
+    public String sendStudentReport(
+            @RequestParam("toEmail") String toEmail,
+            @RequestParam("subject") String subject,
+            @RequestParam("message") String message,
+            @RequestParam(value = "attachment", required = false) MultipartFile attachment
+    ){
+        emailSender.sendEmailWithAttachment(toEmail, subject, message, attachment);
+        return "Email sent successfully";
     }
 
 }

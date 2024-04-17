@@ -8,6 +8,8 @@ import java.util.List;
 public interface UserService {
     UserDto createCustomer(UserDto userDto);
 
+    UserDto createAdmin(String adminEmail);
+
     UserDto createUser(UserDto userDto);
 
     UserDto getUserById(Long userId);
@@ -19,6 +21,8 @@ public interface UserService {
     void deleteUser(Long userId);
 
     boolean isUserExistsWithEmail(String emailAddress);
+
+    boolean isAdminExists();
 
     Long totalUsersCount();
 

@@ -61,7 +61,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             newEnrollment.setEnrolledCourse(
                     availableCourseService.getAvailableCourseById(enrollmentDto.getEnrolledCourseId())
             );
-            newEnrollment.setEnrolledStudent(studentService.createStudent(newStudent));
+            newEnrollment.setEnrolledStudent(studentService.createStudent(newStudent)); //Student created
             newEnrolledStudent = enrollmentRepo
                     .save(EnrollmentMapper.mapToEnrollment(newEnrollment)); //Enrollment created
         }
